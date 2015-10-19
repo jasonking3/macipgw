@@ -1,8 +1,6 @@
 /*
  * AppleTalk MacIP Gateway
  *
- * $Id: macip.c,v 1.1.1.1 2001/10/28 15:01:49 stefanbethke Exp $
- *
  * Original work (c) 1997 Stefan Bethke. All rights reserved.
  * Modified work (c) 2015 Jason King. All rights reserved.
  *
@@ -439,7 +437,8 @@ static void config_input (ATP atp, struct sockaddr_at *faddr, char *packet, int 
 void macip_input (void) {
 	struct sockaddr_at	sat;
 	char				buffer[800];
-	int					len, flen;
+	int					len;
+	unsigned int		flen;
 
 	bzero (&sat, sizeof (sat));
 	sat.sat_family = AF_APPLETALK;

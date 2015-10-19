@@ -1,9 +1,6 @@
 /*
  * Asnychrounous NBP lookup
  *
- *
- * $Id: nbp_lkup_async.c,v 1.1.1.1 2001/10/28 15:01:50 stefanbethke Exp $
- *
  * Original work (c) 1997 Stefan Bethke. All rights reserved.
  * Modified work (c) 2015 Jason King. All rights reserved.
  *
@@ -89,12 +86,12 @@ static char *nbp_addtuple (char *p, struct sockaddr_at addr,
 }
 
 int nbp_lookup_req (int s, char *name, char *type, char *zone) {
-	static int			rqid = 1;
-	static int			nbp_port = 0;
+	static int		rqid = 1;
+	static int		nbp_port = 0;
 	struct sockaddr_at	addr;
-	int					i;
-	char				buffer[500];
-	char				*p = buffer;
+	unsigned int		i;
+	char			buffer[500];
+	char			*p = buffer;
 	struct nbphdr		nh;
 	struct servent		*se;
 

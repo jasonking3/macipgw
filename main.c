@@ -1,8 +1,6 @@
 /*
  * AppleTalk MacIP Gateway
  *
- * $Id: main.c,v 1.1.1.1 2001/10/28 15:01:49 stefanbethke Exp $
- *
  * Original work (c) 1997 Stefan Bethke. All rights reserved.
  * Modified work (c) 2015 Jason King. All rights reserved.
  *
@@ -161,7 +159,7 @@ void usage (char *c) {
 }
 
 
-void main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
 	struct sigaction	sv;
 	u_long			net=0, mask=0, ns=0;
 	char 			*zone = "*";
@@ -242,6 +240,6 @@ void main(int argc, char *argv[]) {
 
 	server();
 
-	die (0);
+	return (0);
 }
 

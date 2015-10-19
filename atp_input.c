@@ -1,8 +1,6 @@
 /*
  * Add an AT packet to ATPs input queue
  *
- * $Id: atp_input.c,v 1.1.1.1 2001/10/28 15:01:48 stefanbethke Exp $
- *
  * Original work (c) 1997 Stefan Bethke. All rights reserved.
  * Modified work (c) 2015 Jason King. All rights reserved.
  *

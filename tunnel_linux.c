@@ -1,8 +1,6 @@
 /*
  * AppleTalk MacIP Gateway
  *
- * $Id: macip.c,v 1.1.1.1 2001/10/28 15:01:49 stefanbethke Exp $
- *
  * Original work (c) 1997 Stefan Bethke. All rights reserved.
  * Modified work (c) 2015 Jason King. All rights reserved.
  *
@@ -166,7 +164,7 @@ static int tunnel_create(char *dev, int flags) {
 
 int tunnel_open (u_long net, u_long mask, outputfunc_t o) {
 	int					i;
-	char				s[32], *q;
+	char				s[32];
 	
 	gTunnel.dev = 0;
 	for (i=0; i<=9; i++) {
@@ -200,9 +198,8 @@ int tunnel_open (u_long net, u_long mask, outputfunc_t o) {
 }
 
 void tunnel_close (void) {
-	int		i, sk;
+	int		sk;
 	struct ifreq		ifrq;
-	struct sockaddr_in	*sin;
 
 	sk = socket (PF_INET, SOCK_DGRAM, 0);
 	if (sk < 0) {
