@@ -56,13 +56,7 @@ static int free_buf (struct atpbuf *bp) {
 }
 
 static void *alloc_buf (void) {
-	void *p;
-	
-	p = malloc(sizeof(struct atpbuf));
-	if(p != NULL)
-		return p;
-	else
-		return NULL;
+	return(malloc(sizeof(struct atpbuf)));
 }
 
 /*#define EBUG
