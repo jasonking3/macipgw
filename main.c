@@ -163,12 +163,12 @@ int main(int argc, char *argv[]) {
 	struct sigaction	sv;
 	u_long			net=0, mask=0, ns=0;
 	char 			*zone = "*";
-	char			c;
+	int			opt;
 
 	gDebug = 0;
 
-	while ((c = getopt( argc, argv, "d:n:z:V" )) != 255 ) {
-		switch ( c ) {
+	while ((opt = getopt( argc, argv, "d:n:z:V" )) != -1 ) {
+		switch ( opt ) {
 			case 'd':
 #if defined(DEBUG)
 				gDebug = strtol (optarg, 0, 0);
