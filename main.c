@@ -68,7 +68,7 @@ int		tundev;
 
 
 static void die (int n) {
-	syslog (LOG_INFO, "going down on signal");
+	syslog (LOG_INFO, "going down on signal %d", n);
 	if (gDebug)
 		fprintf (stderr, "Stopping\n");
 	macip_close ();
@@ -228,13 +228,13 @@ int main(int argc, char *argv[]) {
 
 	tundev = tunnel_open (net, mask, macip_output);
 	if (tundev < 0) {
-		printf ("could not open tunnel.\n");
+		printf ("macipgw: could not open tunnel.\n");
 		die (EX_OSERR);
 	}
 	
 	atsocket = macip_open (zone, net, mask, ns, tunnel_output);
 	if (atsocket < 0) {
-		printf ("could not initialise MacIP\n");
+		printf ("macipgw: could not initialise MacIP\n");
 		die (EX_OSERR);
 	}
 

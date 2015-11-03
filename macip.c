@@ -69,6 +69,11 @@
 #define MACIP_NODETYPE "IPADDRESS"
 #define MACIP_GATETYPE "IPGATEWAY"
 
+#define MACIP_ATPRETRIES (5)
+#define MACIP_ATPWAIT (5)
+#define MACIP_NBPRETRIES (5)
+#define MACIP_NBPWAIT (5)
+
 #define ARPTIMEOUT (30)
 #define ARPRETRIES (10)
 /* ping every 30secs, give up after 5mins */
@@ -621,34 +626,52 @@ void macip_idle (void) {
 
 int
 macip_open (char *zone, u_long net, u_long mask, u_long ns, outputfunc_t o) {
+	int i;
+
 	if (init_ip (net, mask, ns)) {
 		if (gDebug & DEBUG_MACIP)
 			printf ("macip_open: init_ip failed.\n");
 		return -1;
 	}
 	
-	if ((gMacip.atp=atp_open(0, NULL)) == NULL) {
-		if (gDebug & DEBUG_MACIP)
-			perror ("macip_open: atp_open");
-		return -1;
-	}
+	for (i=0; i < MACIP_ATPRETRIES; i++) {
+		if (i == MACIP_ATPRETRIES-1) {
+			printf ("macip_open: too many retries\n");
+			return -1;
+		}
+		if ((gMacip.atp=atp_open(0, NULL)) == NULL) {
+			if (gDebug & DEBUG_MACIP)
+				perror ("macip_open: atp_open");
+			printf ("macip_open: retrying in %d seconds\n", MACIP_ATPRETRIES);
+			sleep (MACIP_ATPWAIT);
+		} else
+			break;
+	}	
 	gMacip.sock = gMacip.atp->atph_socket;
 
 	strcpy (gMacip.name, iptoa (gMacip.addr));
 	strcpy (gMacip.type, MACIP_GATETYPE);
 	strcpy (gMacip.zone, zone);
-	if (gDebug & DEBUG_MACIP) {
-		printf ("macip_open: registering %s:%s@%s ", 
-			gMacip.name, gMacip.type, gMacip.zone);
-		fflush (stdout);
-	}
-	if (nbp_rgstr (atp_sockaddr (gMacip.atp), 
-			gMacip.name, 
-			gMacip.type, 
-			gMacip.zone) < 0) {
-		if (gDebug & DEBUG_MACIP)
-			perror ("failed");
-		return -1;
+	for (i=0; i < MACIP_NBPRETRIES; i++) {
+		if (i == MACIP_NBPRETRIES-1) {
+			printf ("macip_open: too many retries\n");
+			return -1;
+		}
+		if (gDebug & DEBUG_MACIP) {
+			printf ("macip_open: registering %s:%s@%s...", 
+				gMacip.name, gMacip.type, gMacip.zone);
+			fflush (stdout);
+		}
+		if (nbp_rgstr (atp_sockaddr (gMacip.atp), 
+				gMacip.name, 
+				gMacip.type, 
+				gMacip.zone) < 0) {
+			if (gDebug & DEBUG_MACIP)
+				perror ("failed");
+			printf ("macip_open: retrying in %d seconds\n", MACIP_NBPRETRIES);
+			sleep (MACIP_NBPWAIT);
+		} else
+			break;
 	}
 	if (gDebug & DEBUG_MACIP)
 		printf ("done.\n");
