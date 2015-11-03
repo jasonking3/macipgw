@@ -31,6 +31,7 @@ LDFLAGS=-L/usr/local/lib -latalk
 SOURCES=atp_input.c macip.c main.c nbp_lkup_async.c tunnel_linux.c util.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=macipgw
+DESTDIR = /usr/local/sbin
 
 all: $(SOURCES) $(EXECUTABLE)
     
@@ -42,3 +43,6 @@ $(EXECUTABLE): $(OBJECTS)
 
 clean:
 	rm $(OBJECTS) $(EXECUTABLE)
+
+install:
+	cp $(EXECUTABLE) $(DESTDIR)
