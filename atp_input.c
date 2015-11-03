@@ -46,18 +46,8 @@
 #endif
 
 extern int at_addr_eq (struct sockaddr_at *paddr, struct sockaddr_at *saddr);
-
-static int free_buf (struct atpbuf *bp) {
-	if (bp != NULL)
-		free(bp);
-	bp = NULL;
-	
-	return 0;
-}
-
-static void *alloc_buf (void) {
-	return(malloc(sizeof(struct atpbuf)));
-}
+extern int atp_free_buf (struct atpbuf *);
+extern struct atpbuf *atp_alloc_buf (void);
 
 /*#define EBUG
 */
@@ -102,17 +92,17 @@ int atp_input(ATP ah, struct sockaddr_at *faddr, char *rbuf, int recvlen) {
 				for ( i = 0; i < 8; ++i ) {
 					if ( cq->atpbuf_info.atpbuf_xo.atpxo_packet[ i ]
 								!= NULL ) {
-						free_buf ( cq->atpbuf_info.atpbuf_xo.atpxo_packet[ i ] );
+						atp_free_buf ( cq->atpbuf_info.atpbuf_xo.atpxo_packet[ i ] );
 					}
 				}
-				free_buf( cq );
+				atp_free_buf( cq );
 			}
 		} else {
 			/* add packet to incoming queue */
 #ifdef EBUG
 		printf( "<%d> queuing incoming...\n", getpid() );
 #endif
-			if (( inbuf = (struct atpbuf *)alloc_buf()) == NULL ) {
+			if (( inbuf = atp_alloc_buf()) == NULL ) {
 #ifdef EBUG
 		printf( "<%d> can't alloc buffer\n", getpid() );
 #endif
