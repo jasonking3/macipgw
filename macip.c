@@ -63,6 +63,7 @@
 #define DDPTYPE_MACIP (22)
 #define MACIP_ASSIGN (1)
 #define MACIP_SERVER (3)
+#define MACIP_PORT (72)
 
 #define MACIP_MAXMTU (586)
 
@@ -639,7 +640,7 @@ macip_open (char *zone, u_long net, u_long mask, u_long ns, outputfunc_t o) {
 			printf ("macip_open: too many retries\n");
 			return -1;
 		}
-		if ((gMacip.atp=atp_open(0, NULL)) == NULL) {
+		if ((gMacip.atp=atp_open(MACIP_PORT, NULL)) == NULL) {
 			if (gDebug & DEBUG_MACIP)
 				perror ("macip_open: atp_open");
 			printf ("macip_open: retrying in %d seconds\n", MACIP_ATPRETRIES);
