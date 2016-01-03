@@ -171,7 +171,7 @@ int tunnel_open (uint32_t net, uint32_t mask, outputfunc_t o) {
 	for (i=0; i<=9; i++) {
 		sprintf (s, "tun%d", i);
 		gTunnel.dev = tunnel_create (s, IFF_TUN | IFF_NO_PI);
-		if (gTunnel.dev)
+		if (gTunnel.dev > 0)
 			break;
 	}
 	
