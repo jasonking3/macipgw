@@ -25,7 +25,7 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 CC=gcc
-CFLAGS=-c -Wall -DDEBUG
+CFLAGS=-c -Wall -DDEBUG -g
 
 # Defaults are for a systemwide install of netatalk 3.x.
 # To compile against a local, already-built netatalk 2.x source tree, do:
