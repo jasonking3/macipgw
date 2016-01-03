@@ -42,6 +42,7 @@
 
 #include <signal.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -161,7 +162,7 @@ void usage (char *c) {
 
 int main(int argc, char *argv[]) {
 	struct sigaction	sv;
-	u_long			net=0, mask=0, ns=0;
+	uint32_t       		net=0, mask=0, ns=0;
 	char 			*zone = "*";
 	int			opt;
 

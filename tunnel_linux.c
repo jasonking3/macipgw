@@ -39,6 +39,7 @@
 #include <linux/route.h>
 
 #include <stdio.h>
+#include <stdint.h>
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -50,15 +51,15 @@
 struct tunnel {
 	int		dev;
 	char	name[32];
-	u_long	net;
-	u_long	mask;
+	uint32_t	net;
+	uint32_t	mask;
 };
 
 static struct tunnel gTunnel;
 
 static outputfunc_t	gOutput;
 
-static void set_sin (struct sockaddr *s, u_long ip) {
+static void set_sin (struct sockaddr *s, uint32_t ip) {
 	struct sockaddr_in *sin = (struct sockaddr_in *)s;
 	bzero (sin, sizeof (*sin));
 	sin->sin_family      = AF_INET;
@@ -162,7 +163,7 @@ static int tunnel_create(char *dev, int flags) {
 	return fd;
 }
 
-int tunnel_open (u_long net, u_long mask, outputfunc_t o) {
+int tunnel_open (uint32_t net, uint32_t mask, outputfunc_t o) {
 	int					i;
 	char				s[32];
 	

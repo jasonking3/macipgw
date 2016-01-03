@@ -24,7 +24,9 @@
  * SUCH DAMAGE.
  */
 
-extern int  tunnel_open (u_long net, u_long mask, outputfunc_t o);
+#include <stdint.h>
+
+extern int  tunnel_open (uint32_t net, uint32_t mask, outputfunc_t o);
 extern void tunnel_close (void);
 extern void tunnel_input (void);
 extern void tunnel_output (char *buffer, int len);

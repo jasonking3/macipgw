@@ -29,12 +29,13 @@
 #include <sys/types.h>
 
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 
 int gDebug;
 
 
-char *iptoa (u_long ip) {
+char *iptoa (uint32_t ip) {
 	static char s[16];
 	
 	sprintf (s, "%ld.%ld.%ld.%ld", 
@@ -44,8 +45,8 @@ char *iptoa (u_long ip) {
 }
 
 
-u_long atoip (char *s) {
-	u_long ip;
+uint32_t atoip (char *s) {
+	uint32_t ip;
 	
 	ip = strtol (s, &s, 0);
 	if (*s++ != '.' ) return 0;
