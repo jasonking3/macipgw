@@ -43,11 +43,19 @@ The above may be enough for you if you have routing enabled throughout your LAN 
 	# Completed on Thu Oct 15 22:54:35 2015
 Once this configuration is put in place, the host will NAT (well, PAT actually) any IP traffic originating from the MacIP network and being sent out the wlan0 interface.  This would likely be a typical usage for macipgw on the Raspberry Pi.
 
+### Kernel
+
+Your kernel must be configured with the CONFIG_IPDDP option *disabled* completely.  It is not sufficient to compile it as a module -- in order to support the module, the kernel is modified to intercept all MacIP traffic, so userspace applications such as macipgw cannot handle it.
+
 ### Test Setup
 
 This was all developed and tested using a PowerBook 5300C, A2SERVER on the Raspberry Pi and an AsanteTalk bridge.  The setup looks something like this:
 
 PowerBook 5300C ---- [LocalTalk] ---- AsanteTalk bridge ---- [Ethernet] ---- Raspberry Pi ---- [WiFi] ---- Home LAN
+
+It has also been tested with the following setup:
+
+PowerMac G3 All-in-One ---- [LocalTalk] ---- AsanteTalk bridge ---- [Ethernet] ---- [Ubuntu x86_64, Linux kernel 4.2] ---- LAN
 
 ### Contact Info
 

@@ -42,6 +42,7 @@
 
 #include <signal.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -49,6 +50,7 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <sysexits.h>
+#include <pwd.h>
 
 #include "common.h"
 #include "macip.h"
@@ -153,21 +155,35 @@ void disassociate (void) {
 void usage (char *c) {
 	if (c)
 		fprintf (stderr, "%s\n", c);
-	fprintf( stderr, "Usage:\tmacipgw [-d debug] [-z zone] [-n nameserver] [-V]\n"
+	fprintf( stderr, "Usage:\tmacipgw [-d debug] [-z zone] [-n nameserver] [-u unprivileged-user] [-V]\n"
 		"\t\tmacip-net macip-netmask\n");
 	exit (EX_USAGE);
+}
+
+struct passwd * get_user(const char *username) {
+	struct passwd *pwd;
+	pwd = getpwnam(username);
+	if (pwd == NULL) {
+		fprintf(stderr, "Unrecognized username: %s", username);
+		exit (EX_USAGE);
+	}
+	return pwd;
 }
 
 
 int main(int argc, char *argv[]) {
 	struct sigaction	sv;
-	u_long			net=0, mask=0, ns=0;
+	uint32_t       		net=0, mask=0, ns=0;
 	char 			*zone = "*";
 	int			opt;
 
+	struct passwd *pwd = NULL;
+	uid_t user;
+	gid_t group;
+	
 	gDebug = 0;
 
-	while ((opt = getopt( argc, argv, "d:n:z:V" )) != -1 ) {
+	while ((opt = getopt( argc, argv, "d:n:z:V:u:" )) != -1 ) {
 		switch ( opt ) {
 			case 'd':
 #if defined(DEBUG)
@@ -188,6 +204,11 @@ int main(int argc, char *argv[]) {
 				break;
 			case 'V':
 				usage(version);
+				break;
+			case 'u':
+				pwd = get_user(optarg);
+				user = pwd->pw_uid;
+				group = pwd->pw_gid;
 				break;
 
 			default:
@@ -236,6 +257,17 @@ int main(int argc, char *argv[]) {
 	if (atsocket < 0) {
 		printf ("macipgw: could not initialise MacIP\n");
 		die (EX_OSERR);
+	}
+
+	if (pwd) {
+		if (setgid(user) == -1) {
+			printf("macipgw: could not drop root privileges (group)\n");
+			die(EX_OSERR);
+		}
+		if (setuid(group) == -1) {
+			printf("macipgw: could not drop root privileges (user)\n");
+			die(EX_OSERR);
+		}
 	}
 
 	server();

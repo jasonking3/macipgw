@@ -25,9 +25,20 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 CC=gcc
-CFLAGS=-c -Wall -DDEBUG
-IFLAGS=-I/usr/local/include
-LDFLAGS=-L/usr/local/lib -latalk
+CFLAGS=-c -Wall -DDEBUG -g
+
+# Defaults are for a systemwide install of netatalk 3.x.
+# To compile against a local, already-built netatalk 2.x source tree, do:
+# export IFLAGS="-I/path/to/netatalk-2.x.y/include/ -I/path/to/netatalk-2.x.y/sys/"
+# export NO_LINK_ATALK=1
+# export LDFLAGS="/path/to/netatalk-2.x.y/libatalk/.libs/libatalk.a"
+
+IFLAGS+=-I/usr/local/include
+LDFLAGS+=-L/usr/local/lib
+ifndef NO_LINK_ATALK
+	LDFLAGS+=-latalk
+endif
+
 SOURCES=atp_input.c macip.c main.c nbp_lkup_async.c tunnel_linux.c util.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=macipgw
