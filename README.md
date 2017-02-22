@@ -4,6 +4,8 @@ This is a Linux port of the FreeBSD MacIP gateway implementation originally writ
 
 The primary intent of this port was to have MacIP functionality on the Raspberry Pi so, while it may (and probably will) compile under other Linux variants, it has only been tested on Raspbian.
 
+Note:  If you don't want to deal with compiling macipgw yourself, check out http://macip.net for a pre-configured VM that uses this code.
+
 ### Usage Examples
 
 The makefile has debugging enabled with the -DDEBUG switch, comment this out if you intend to run this without debugging.  A typical command to run macipgw with debugging would look something like this:
@@ -51,11 +53,11 @@ Your kernel must be configured with the CONFIG_IPDDP option *disabled* completel
 
 This was all developed and tested using a PowerBook 5300C, A2SERVER on the Raspberry Pi and an AsanteTalk bridge.  The setup looks something like this:
 
-PowerBook 5300C ---- [LocalTalk] ---- AsanteTalk bridge ---- [Ethernet] ---- Raspberry Pi ---- [WiFi] ---- Home LAN
+PowerBook 5300C ---- [LocalTalk] ---- AsanteTalk bridge ---- [Ethernet] ---- Raspberry Pi ---- [WiFi] ---- LAN
 
 It has also been tested with the following setup:
 
-PowerMac G3 All-in-One ---- [LocalTalk] ---- AsanteTalk bridge ---- [Ethernet] ---- [Ubuntu x86_64, Linux kernel 4.2] ---- LAN
+PowerMac G3 All-in-One ---- [LocalTalk] ---- AsanteTalk bridge ---- [Ethernet] ---- Ubuntu x86_64, Linux kernel 4.2 ---- LAN
 
 ### Contact Info
 
