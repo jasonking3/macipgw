@@ -387,7 +387,7 @@ static void config_input (ATP atp, struct sockaddr_at *faddr, char *packet, int 
 	rq = (struct macip_req *)(atpb.atp_rreqdata);
 	f = ntohl(rq->miprc.mipr_function);
 	len = atpb.atp_rreqdlen;
-	if (gDebug & DEBUG_MACIP)
+	if (gDebug & DEBUG_MACIP & DEBUG_PACKET)
 		printf ("\nMacIP req: %d from %d.%d\n", f, 
 			ntohs(atpb.atp_saddr->sat_addr.s_net), 
 			atpb.atp_saddr->sat_addr.s_node);
@@ -406,7 +406,7 @@ static void config_input (ATP atp, struct sockaddr_at *faddr, char *packet, int 
 				rq->miprd.mipr_subnet     = htonl(gMacip.mask);
 				len = sizeof (struct macip_req);
 				arp_set (ip, &sat);
-				if (gDebug & DEBUG_MACIP)
+				if (gDebug & DEBUG_MACIP & DEBUG_PACKET)
 					printf ("assigned %s.\n", iptoa (ip));
 			} else {
 				rq->miprc.mipr_function = htonl(0);
@@ -616,7 +616,7 @@ void macip_idle (void) {
 						iptoa(IPADDR(e))); 
 			} else {
 				e->assigned = ASSIGN_FREE;
-				if (gDebug & DEBUG_MACIP)
+				if (gDebug & DEBUG_MACIP & DEBUG_PACKET)
 					printf ("macip_idle: arp entry %s/%d.%d free'd.\n",
 						iptoa(IPADDR(e)), ntohs(e->sat.sat_addr.s_net),
 						e->sat.sat_addr.s_node);
