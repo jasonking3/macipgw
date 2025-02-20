@@ -227,7 +227,7 @@ static int arp_lookup (struct sockaddr_at *sat, uint32_t ip) {
 	struct ipent	*e = get_ipent (ip);
 
 	if (e && e->assigned) {
-		if (gDebug & DEBUG_MACIP)
+		if (gDebug & DEBUG_MACIP & DEBUG_PACKET)
 			printf ("found arp entry: %s -> %d.%d\n",
 				iptoa (ip), ntohs (e->sat.sat_addr.s_net),
 				e->sat.sat_addr.s_node);
@@ -258,7 +258,7 @@ static void arp_set (uint32_t ip, struct sockaddr_at *sat) {
 		e->retr = ARPRETRIES;
 		if (e->assigned == ASSIGN_FREE)
 			e->assigned = ASSIGN_LEASED;
-		if (gDebug & DEBUG_MACIP) 
+		if (gDebug & DEBUG_MACIP & DEBUG_PACKET) 
 		printf ("arp_set: %s -> %d.%d\n", iptoa(ip),
 			ntohs (sat->sat_addr.s_net), sat->sat_addr.s_node);
 	}
