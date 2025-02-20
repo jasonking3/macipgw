@@ -1,0 +1,4 @@
+.vagrant
+.vscode
+*.o
+.config*
