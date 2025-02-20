@@ -240,7 +240,7 @@ void tunnel_input (void) {
 			perror ("tunnel_input: read");
 		return;
 	}
-	if (gDebug & DEBUG_TUNNEL)
+	if (gDebug & DEBUG_TUNNEL & DEBUG_PACKET)
 		printf ("read packet from tunnel.\n");
 	gOutput (buffer, i);
 }
@@ -248,6 +248,6 @@ void tunnel_input (void) {
 
 void tunnel_output (char *buffer, int len) {
 	write (gTunnel.dev, buffer, len);
-	if (gDebug & DEBUG_TUNNEL)
+	if (gDebug & DEBUG_TUNNEL & DEBUG_PACKET)
 		printf ("sent packet into tunnel.\n");
 }

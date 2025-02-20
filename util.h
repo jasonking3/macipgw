@@ -32,10 +32,12 @@ extern int gDebug;
 #define DEBUG_MACIP		(0x0001)
 #define DEBUG_ROUTE		(0x0010)
 #define DEBUG_TUNNEL	(0x0100)
+#define DEBUG_PACKET    (0x1000)
 #else
 #define DEBUG_MACIP		(0)
 #define DEBUG_ROUTE		(0)
 #define DEBUG_TUNNEL	(0)
+#define DEBUG_PACKET    (0)
 #endif
 
 extern char *iptoa (uint32_t ip);

@@ -301,7 +301,7 @@ static void arp_input (struct sockaddr_at *sat, char *buffer, int len) {
 static void ip_input (struct sockaddr_at *sat, char *buffer, int len) {
 	struct ip	*p = (struct ip *)buffer;
 
-	if (gDebug & DEBUG_MACIP) {
+	if (gDebug & DEBUG_MACIP & DEBUG_PACKET) {
 		printf ("got IP packet from %d.%d\n", 
 			ntohs(sat->sat_addr.s_net), sat->sat_addr.s_node);
 		printf ("\tsource=%s, ", iptoa( ntohl(p->ip_src.s_addr) ));
@@ -324,10 +324,10 @@ void macip_output (char *buffer, int len) {
 	
 	if (len > MACIP_MAXMTU) {
 		if (gDebug & DEBUG_MACIP)
-			printf ("macip_output: packet to large, dropped.\n");
+			printf ("macip_output: packet too large, dropped.\n");
 		return;
 		/*	actually, we could fragment here, but this should never happen,
-			as the MTU for the tunnel should be small enought.
+			as the MTU for the tunnel should be small enough.
 		*/
 	}
 	if (arp_lookup (&sat, ntohl(ip->ip_dst.s_addr)) ) {
@@ -456,7 +456,7 @@ void macip_input (void) {
 	flen = sizeof (struct sockaddr_at);
 	if ((len=recvfrom (gMacip.sock, buffer, ATP_BUFSIZ, 
 			0, (struct sockaddr *)&sat, &flen)) > 0) {
-		if (gDebug & DEBUG_MACIP)
+		if (gDebug & DEBUG_MACIP & DEBUG_PACKET)
 			printf ("macip_input: packet: DDP=%d, len=%d\n", *buffer, len);
 		switch (*buffer) {	/*DDPTYPE*/
 			case DDPTYPE_NBP:
@@ -611,7 +611,7 @@ void macip_idle (void) {
 			if (e->retr--) {
 				icmp_echo (gMacip.addr, IPADDR(e));
 				e->timo = n + ARPTIMEOUT;
-				if (gDebug & DEBUG_MACIP)
+				if (gDebug & DEBUG_MACIP & DEBUG_PACKET)
 					printf ("macip_idle: sending probe to %s.\n", 
 						iptoa(IPADDR(e))); 
 			} else {
@@ -675,8 +675,10 @@ macip_open (char *zone, uint32_t net, uint32_t mask, uint32_t ns, outputfunc_t o
 		} else
 			break;
 	}
-	if (gDebug & DEBUG_MACIP)
+	if (gDebug & DEBUG_MACIP) {
 		printf ("done.\n");
+		fflush (stdout);
+	}
 	if (get_zones())
 		return -1;
 		
