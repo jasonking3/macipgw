@@ -227,7 +227,7 @@ static int arp_lookup (struct sockaddr_at *sat, uint32_t ip) {
 	struct ipent	*e = get_ipent (ip);
 
 	if (e && e->assigned) {
-		if (gDebug & DEBUG_MACIP & DEBUG_PACKET)
+		if (gDebug & DEBUG_MACIP & DEBUG_DETAIL)
 			printf ("found arp entry: %s -> %d.%d\n",
 				iptoa (ip), ntohs (e->sat.sat_addr.s_net),
 				e->sat.sat_addr.s_node);
@@ -258,7 +258,7 @@ static void arp_set (uint32_t ip, struct sockaddr_at *sat) {
 		e->retr = ARPRETRIES;
 		if (e->assigned == ASSIGN_FREE)
 			e->assigned = ASSIGN_LEASED;
-		if (gDebug & DEBUG_MACIP & DEBUG_PACKET) 
+		if (gDebug & DEBUG_MACIP & DEBUG_DETAIL) 
 		printf ("arp_set: %s -> %d.%d\n", iptoa(ip),
 			ntohs (sat->sat_addr.s_net), sat->sat_addr.s_node);
 	}
@@ -301,7 +301,7 @@ static void arp_input (struct sockaddr_at *sat, char *buffer, int len) {
 static void ip_input (struct sockaddr_at *sat, char *buffer, int len) {
 	struct ip	*p = (struct ip *)buffer;
 
-	if (gDebug & DEBUG_MACIP & DEBUG_PACKET) {
+	if (gDebug & DEBUG_MACIP & DEBUG_DETAIL) {
 		printf ("got IP packet from %d.%d\n", 
 			ntohs(sat->sat_addr.s_net), sat->sat_addr.s_node);
 		printf ("\tsource=%s, ", iptoa( ntohl(p->ip_src.s_addr) ));
@@ -387,7 +387,7 @@ static void config_input (ATP atp, struct sockaddr_at *faddr, char *packet, int 
 	rq = (struct macip_req *)(atpb.atp_rreqdata);
 	f = ntohl(rq->miprc.mipr_function);
 	len = atpb.atp_rreqdlen;
-	if (gDebug & DEBUG_MACIP & DEBUG_PACKET)
+	if (gDebug & DEBUG_MACIP & DEBUG_DETAIL)
 		printf ("\nMacIP req: %d from %d.%d\n", f, 
 			ntohs(atpb.atp_saddr->sat_addr.s_net), 
 			atpb.atp_saddr->sat_addr.s_node);
@@ -406,7 +406,7 @@ static void config_input (ATP atp, struct sockaddr_at *faddr, char *packet, int 
 				rq->miprd.mipr_subnet     = htonl(gMacip.mask);
 				len = sizeof (struct macip_req);
 				arp_set (ip, &sat);
-				if (gDebug & DEBUG_MACIP & DEBUG_PACKET)
+				if (gDebug & DEBUG_MACIP & DEBUG_DETAIL)
 					printf ("assigned %s.\n", iptoa (ip));
 			} else {
 				rq->miprc.mipr_function = htonl(0);
@@ -456,7 +456,7 @@ void macip_input (void) {
 	flen = sizeof (struct sockaddr_at);
 	if ((len=recvfrom (gMacip.sock, buffer, ATP_BUFSIZ, 
 			0, (struct sockaddr *)&sat, &flen)) > 0) {
-		if (gDebug & DEBUG_MACIP & DEBUG_PACKET)
+		if (gDebug & DEBUG_MACIP & DEBUG_DETAIL)
 			printf ("macip_input: packet: DDP=%d, len=%d\n", *buffer, len);
 		switch (*buffer) {	/*DDPTYPE*/
 			case DDPTYPE_NBP:
@@ -611,12 +611,12 @@ void macip_idle (void) {
 			if (e->retr--) {
 				icmp_echo (gMacip.addr, IPADDR(e));
 				e->timo = n + ARPTIMEOUT;
-				if (gDebug & DEBUG_MACIP & DEBUG_PACKET)
+				if (gDebug & DEBUG_MACIP & DEBUG_DETAIL)
 					printf ("macip_idle: sending probe to %s.\n", 
 						iptoa(IPADDR(e))); 
 			} else {
 				e->assigned = ASSIGN_FREE;
-				if (gDebug & DEBUG_MACIP & DEBUG_PACKET)
+				if (gDebug & DEBUG_MACIP & DEBUG_DETAIL)
 					printf ("macip_idle: arp entry %s/%d.%d free'd.\n",
 						iptoa(IPADDR(e)), ntohs(e->sat.sat_addr.s_net),
 						e->sat.sat_addr.s_node);

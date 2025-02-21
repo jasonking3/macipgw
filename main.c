@@ -99,17 +99,17 @@ static void server(void) {
 		tv.tv_sec  = 2;
 		tv.tv_usec = 0;
 
-		if (gDebug & DEBUG_PACKET) {
+		if (gDebug & DEBUG_DETAIL) {
 			printf ("waiting for packet: ");
 			fflush (stdout);
 		}		
 		if ((i = select (maxfd, &fds, 0, 0, &tv)) > 0) {
 			if (FD_ISSET (atsocket, &fds)) {
-				if (gDebug & DEBUG_PACKET)
+				if (gDebug & DEBUG_DETAIL)
 					printf ("got AT packet.\n");
 				macip_input();
 			} else if (FD_ISSET (tundev, &fds)) {
-				if (gDebug & DEBUG_PACKET)
+				if (gDebug & DEBUG_DETAIL)
 					printf ("got IP packet from tunnel.\n");
 				tunnel_input();
 			}
