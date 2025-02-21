@@ -38,9 +38,9 @@ int gDebug;
 char *iptoa (uint32_t ip) {
 	static char s[16];
 	
-	sprintf (s, "%zu.%zu.%zu.%zu", 
-		(size_t)(ip>>24) & 0xff, (size_t)(ip>>16) & 0xff, 
-		(size_t)(ip>> 8) & 0xff, (size_t)ip & 0xff);
+	sprintf (s, "%ld.%ld.%ld.%ld", 
+		(ip>>24) & 0xff, (ip>>16) & 0xff, 
+		(ip>> 8) & 0xff, ip & 0xff);
 	return s;
 }
 
