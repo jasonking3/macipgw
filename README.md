@@ -10,9 +10,9 @@ Note:  If you don't want to deal with compiling macipgw yourself, check out http
 
 The makefile has debugging enabled with the -DDEBUG switch, comment this out if you intend to run this without debugging.  A typical command to run macipgw with debugging would look something like this:
 
-	./macipgw -d0x111 -n 8.8.8.8 192.168.1.0 255.255.255.0
+	./macipgw -d0x0111 -n 8.8.8.8 192.168.1.0 255.255.255.0
 
-The -d switch will specify that the daemon not fork and turn on all debugging (0x111).  It is useful for testing purposes or if you are having issues.  The rest of the command tells the MacIP clients to use 8.8.8.8 for DNS, assigns 192.168.1.1 as the gateway address and issues MacIP client addresses in the range 192.168.1.2-254.  Note that the network you use with this command MUST be unique from the network of any other interface.  This is because macipgw sets up a separate MacIP network space and expects the host to route between that MacIP space and any other interface (e.g. eth0, wlan0, etc.) 
+The -d switch will specify that the daemon not fork and turn on debugging (0x0111).  If you would like maximum debug detail including every packet, then use 0x1111.  Debugging output can be useful for testing purposes or if you are having issues.  The rest of the command tells the MacIP clients to use 8.8.8.8 for DNS, assigns 192.168.1.1 as the gateway address and issues MacIP client addresses in the range 192.168.1.2-254.  Note that the network you use with this command MUST be unique from the network of any other interface.  This is because macipgw sets up a separate MacIP network space and expects the host to route between that MacIP space and any other interface (e.g. eth0, wlan0, etc.) 
 
 ### Routing
 
