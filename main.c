@@ -72,11 +72,13 @@ int		tundev;
 static void die (int n) {
 	syslog (LOG_INFO, "going down on signal %d", n);
 	if (gDebug)
-		fprintf (stderr, "Stopping\n");
+		fprintf (stderr, "Stopping...");
 	macip_close ();
 	tunnel_close ();
-	if (gDebug)
-		fprintf (stderr, "\nstopped.\n");
+	if (gDebug) {
+		fprintf (stderr, "stopped.\n");
+		fflush (stderr);
+	}
     exit (n);
 }
 
@@ -97,17 +99,17 @@ static void server(void) {
 		tv.tv_sec  = 2;
 		tv.tv_usec = 0;
 
-		if (gDebug) {
+		if (gDebug & DEBUG_DETAIL) {
 			printf ("waiting for packet: ");
 			fflush (stdout);
 		}		
 		if ((i = select (maxfd, &fds, 0, 0, &tv)) > 0) {
 			if (FD_ISSET (atsocket, &fds)) {
-				if (gDebug)
+				if (gDebug & DEBUG_DETAIL)
 					printf ("got AT packet.\n");
 				macip_input();
 			} else if (FD_ISSET (tundev, &fds)) {
-				if (gDebug)
+				if (gDebug & DEBUG_DETAIL)
 					printf ("got IP packet from tunnel.\n");
 				tunnel_input();
 			}
