@@ -1,5 +1,7 @@
 ### macipgw
 
+**This project has been folded into [Netatalk](https://github.com/Netatalk/netatalk) v4 upstream.** Active development, bug fixes, and support now happen there — see [`contrib/macipgw`](https://github.com/Netatalk/netatalk/tree/main/contrib/macipgw) in the Netatalk repository. New users should start there rather than with this repo, which is kept around for historical/archival reference and is not being actively synced with upstream changes.
+
 This is a Linux port of the FreeBSD MacIP gateway implementation originally written by Stefan Bethke.  Stefan's original work is hosted on Sourceforge [here](http://macipgw.sourceforge.net).  Most of the original AppleTalk code required little or no changes.  The main work involved converting from FreeBSD tun interfaces to Linux tuntap interfaces.  I left the original license intact and it is applied to all of the Linux-specific changes as well.
 
 The primary intent of this port was to have MacIP functionality on the Raspberry Pi so, while it may (and probably will) compile under other Linux variants, it has only been tested on Raspbian.
